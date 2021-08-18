@@ -1,5 +1,5 @@
 {
-    "name": "nelexa/request-dto-bundle",
+    "name": "fenix007/request-dto-bundle",
     "type": "symfony-bundle",
     "description": "This Symfony Bundle provides request objects support for Symfony controller actions",
     "keywords": [
