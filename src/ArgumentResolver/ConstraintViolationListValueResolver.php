@@ -36,7 +36,7 @@ final class ConstraintViolationListValueResolver implements ArgumentValueResolve
             );
         }
 
-        $request->attributes->remove(self::REQUEST_ATTR_KEY);
+//        $request->attributes->remove(self::REQUEST_ATTR_KEY);
 
         if ($argument->isNullable() && $violationList->count() === 0) {
             $violationList = null;

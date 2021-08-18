@@ -8,6 +8,7 @@ use Nelexa\RequestDtoBundle\Exception\RequestDtoValidationException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\ConstraintViolationListNormalizer;
 use Symfony\Component\Serializer\Normalizer\ProblemNormalizer;
+use Symfony\Component\Validator\ConstraintViolation;
 
 class RequestDtoExceptionNormalizer extends ProblemNormalizer
 {
@@ -34,15 +35,14 @@ class RequestDtoExceptionNormalizer extends ProblemNormalizer
      */
     public function normalize($exception, ?string $format = null, array $context = [])
     {
-        $context += [
-            'type' => 'https://tools.ietf.org/html/rfc7807',
-        ];
-        $data = $this->normalizer->normalize($exception->getErrors(), $format, $context);
+        $data   = [];
         $data['status'] = $exception->getStatusCode();
 
-        if ($this->debug) {
-            $data['class'] = \get_class($exception);
-            $data['trace'] = $exception->getTrace();
+        $errors = $exception->getErrors();
+
+        /** @var ConstraintViolation $error */
+        foreach ($errors as $error) {
+            $data['errors'][$error->getPropertyPath()] = $error->getMessage();
         }
 
         return $data;
